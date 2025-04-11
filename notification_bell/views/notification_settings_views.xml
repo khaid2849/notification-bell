@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_notification_settings_form" model="ir.ui.view">
+        <field name="name">user.notification.settings.form</field>
+        <field name="model">user.notification.settings</field>
+        <field name="arch" type="xml">
+            <form string="Notification Settings">
+                <sheet>
+                    <group>
+                        <field name="user_id" invisible="1"/>
+                        <field name="notifications_limit"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_notification_settings_tree" model="ir.ui.view">
+        <field name="name">user.notification.settings.tree</field>
+        <field name="model">user.notification.settings</field>
+        <field name="arch" type="xml">
+            <list string="Notification Settings">
+                <field name="user_id"/>
+                <field name="notifications_limit"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_notification_settings_search" model="ir.ui.view">
+        <field name="name">user.notification.settings.search</field>
+        <field name="model">user.notification.settings</field>
+        <field name="arch" type="xml">
+            <search string="Search Notification Settings">
+                <field name="user_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="User" name="user" domain="[]" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_notification_settings" model="ir.actions.act_window">
+        <field name="name">Notification Settings</field>
+        <field name="res_model">user.notification.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_user_id': uid}</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure your notification preferences!
+            </p>
+            <p>
+                You can set how many notifications you want to see in the dropdown menu.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_notification_settings_admin" model="ir.actions.act_window">
+        <field name="name">All Notification Settings</field>
+        <field name="res_model">user.notification.settings</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No notification settings found!
+            </p>
+            <p>
+                Users can configure their notification preferences here.
+            </p>
+        </field>
+    </record>
+</odoo> 

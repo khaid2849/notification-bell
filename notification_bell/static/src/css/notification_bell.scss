@@ -1,0 +1,64 @@
+.o_notification_bell_icon {
+  .o_notification_counter {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 0.75em;
+  }
+
+  .o_notification_menu {
+    max-height: 400px;
+    overflow-y: auto;
+    width: 350px;
+
+    .o_notification_item {
+      display: flex;
+      align-items: flex-start;
+      padding: 0.5rem 1rem;
+
+      .o_notification_icon {
+        flex-shrink: 0;
+        font-size: 1.2em;
+        margin-top: 0.2rem;
+
+        .o_avatar {
+          width: 32px;
+          height: 32px;
+          object-fit: cover;
+        }
+      }
+
+      .o_notification_content {
+        flex-grow: 1;
+        overflow: hidden;
+
+        .o_notification_title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-weight: 500;
+        }
+
+        .o_notification_message {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          max-height: 2.8em;
+          line-height: 1.4em;
+        }
+
+        .o_notification_date {
+          font-size: 0.8em;
+          display: block;
+          margin-top: 0.25rem;
+        }
+      }
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+  }
+}
