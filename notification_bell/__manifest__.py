@@ -58,6 +58,6 @@ This module is licensed under LGPL-3.
     'auto_install': False,
     'license': 'LGPL-3',
     'images': [
-        'static/description/icon.png',
+        'static/description/images.png',
     ],
 } 
