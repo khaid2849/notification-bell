@@ -57,6 +57,8 @@ This module is licensed under LGPL-3.
     'application': False,
     'auto_install': False,
     'license': 'LGPL-3',
+    'price': 5.36,
+    'currency': 'USD',
     'images': [
         'static/description/images.png',
     ],
