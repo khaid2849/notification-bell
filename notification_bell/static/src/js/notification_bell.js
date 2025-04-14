@@ -9,7 +9,6 @@ import {
   useState,
   onWillUnmount,
 } from "@odoo/owl";
-import { formatDateTime, deserializeDateTime } from "@web/core/l10n/dates";
 import { session } from "@web/session";
 
 export class NotificationBell extends Component {
@@ -20,20 +19,6 @@ export class NotificationBell extends Component {
     this.orm = useService("orm");
     this.action = useService("action");
     this.busService = useService("bus_service");
-
-    this.formatDateTime = (dateStr) => {
-      if (!dateStr) return "";
-      try {
-        const luxonDate = deserializeDateTime(dateStr);
-        if (!luxonDate || !luxonDate.isValid) {
-          return "";
-        }
-        return formatDateTime(luxonDate, { format: "short" });
-      } catch (error) {
-        console.error("Error formatting date:", error);
-        return "";
-      }
-    };
 
     this.state = useState({
       notifications: [],
@@ -73,18 +58,6 @@ export class NotificationBell extends Component {
    * 
    * @private
    */
-  _playNotificationSound() {
-    try {
-      this.notificationSound.currentTime = 0;
-      this.notificationSound.play().catch(error => {
-        console.warn("Could not play notification sound:", error);
-      });
-    } catch (error) {
-      console.warn("Error playing notification sound:", error);
-    }
-  }
-
-
   _registerBusEvents() {
     const channel = `notification_bell_${session.user_id}`;
     this.busService.addChannel(channel);
@@ -101,8 +74,6 @@ export class NotificationBell extends Component {
           if (this.state.isOpen) {
             this.fetchNotifications();
           }
-
-          this._playNotificationSound();
         }
       }
     );

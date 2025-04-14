@@ -3,7 +3,7 @@
     <t t-name="notification_bell.BellIcon" owl="1">
         <div class="o_notification_bell_icon dropdown" t-on-click="toggleDropdown">
             <a href="#" class="dropdown-toggle o-no-caret" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-bell"></i>
+                <i class="fa fa-bell"/>
                 <t t-if="state.unreadCount > 0">
                     <span class="o_notification_counter badge rounded-pill bg-danger">
                         <t t-if="state.unreadCount > 99">99+</t>
@@ -16,10 +16,10 @@
                     <strong>Notification</strong>
                     <div class="float-end notification-actions" t-if="state.notifications.length > 0">
                         <a href="#" t-on-click="markAllAsRead" title="Đánh dấu đã đọc tất cả" class="text-center me-3">
-                            <i class="fa fa-check"></i> Mark all as read
+                            <i class="fa fa-check"/> Mark all as read
                         </a>
                         <a href="#" t-on-click="viewAllNotifications" title="Xem tất cả các thông báo" class="text-center">
-                            <i class="fa fa-list"></i> See all
+                            <i class="fa fa-list"/> See all
                         </a>
                     </div>
                 </div>
@@ -58,11 +58,11 @@
                                                 <div class="o_notification_actions">
                                                     <button t-if="notification.state === 'unread'" class="btn btn-sm btn-link text-primary p-0 me-2" 
                                                             t-att-data-notification-id="notification.id" t-on-click.stop="markAsRead">
-                                                        <i class="fa fa-check"></i>
+                                                        <i class="fa fa-check"/>
                                                     </button>
                                                     <button class="btn btn-sm btn-link text-danger p-0" 
                                                             t-att-data-notification-id="notification.id" t-on-click.stop="dismissNotification">
-                                                        <i class="fa fa-times"></i>
+                                                        <i class="fa fa-times"/>
                                                     </button>
                                                 </div>
                                             </div>
@@ -72,7 +72,7 @@
                             </t>
                             <t t-else="">
                                 <div class="dropdown-item text-center text-muted py-3">
-                                    <i class="fa fa-bell-slash me-1"></i> No notifications
+                                    <i class="fa fa-bell-slash me-1"/> No notifications
                                 </div>
                             </t>
                         </div>
@@ -103,11 +103,11 @@
                                                 <div class="o_notification_actions">
                                                     <button t-if="notification.state === 'unread'" class="btn btn-sm btn-link text-primary p-0 me-2" 
                                                             t-att-data-notification-id="notification.id" t-on-click.stop="markAsRead">
-                                                        <i class="fa fa-check"></i>
+                                                        <i class="fa fa-check"/>
                                                     </button>
                                                     <button class="btn btn-sm btn-link text-danger p-0" 
                                                             t-att-data-notification-id="notification.id" t-on-click.stop="dismissNotification">
-                                                        <i class="fa fa-times"></i>
+                                                        <i class="fa fa-times"/>
                                                     </button>
                                                 </div>
                                             </div>
@@ -117,7 +117,7 @@
                             </t>
                             <t t-else="">
                                 <div class="dropdown-item text-center text-muted py-3">
-                                    <i class="fa fa-bell-slash me-1"></i> No notifications
+                                    <i class="fa fa-bell-slash me-1"/> No notifications
                                 </div>
                             </t>
                         </div>
