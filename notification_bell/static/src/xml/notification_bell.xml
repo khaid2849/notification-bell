@@ -44,21 +44,21 @@
                                                 <img t-att-src="'/web/image/res.users/' + notification.sender_id[0] + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
                                             </div>
                                             <div class="o_notification_content">
-                                                <div class="o_notification_title" t-att-class="{ 'fw-bold': notification.state === 'unread' }">
-                                                    <span t-esc="notification.name"/>
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="o_notification_title" t-att-class="{ 'fw-bold': notification.state === 'unread' }">
+                                                        <span t-esc="notification.name"/>
+                                                    </div>
+                                                    <small class="o_notification_date text-muted ms-2">
+                                                        <t t-esc="notification.create_date"/>
+                                                    </small>
                                                 </div>
                                                 <div class="o_notification_message">
                                                     <span t-esc="notification.message"/>
                                                 </div>
-                                                <div class="notification-footer">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <small class="o_notification_sender text-muted">
-                                                            <t t-esc="notification.sender_name"/>
-                                                        </small>
-                                                        <small class="o_notification_date text-muted">
-                                                            <t t-esc="notification.create_date"/>
-                                                        </small>
-                                                    </div>
+                                                <div class="notification-footer mt-1">
+                                                    <small class="o_notification_sender text-muted">
+                                                        <t t-esc="notification.sender_name"/>
+                                                    </small>
                                                 </div>
                                             </div>
                                         </div>
@@ -91,21 +91,21 @@
                                                 <img t-att-src="'/web/image/res.users/' + notification.sender_id[0] + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
                                             </div>
                                             <div class="o_notification_content">
-                                                <div class="o_notification_title fw-bold">
-                                                    <span t-esc="notification.name"/>
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="o_notification_title fw-bold">
+                                                        <span t-esc="notification.name"/>
+                                                    </div>
+                                                    <small class="o_notification_date text-muted ms-2">
+                                                        <t t-esc="notification.create_date"/>
+                                                    </small>
                                                 </div>
                                                 <div class="o_notification_message">
                                                     <span t-esc="notification.message"/>
                                                 </div>
-                                                <div class="notification-footer">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <small class="o_notification_sender text-muted">
-                                                            <t t-esc="notification.sender_name"/>
-                                                        </small>
-                                                        <small class="o_notification_date text-muted">
-                                                            <t t-esc="notification.create_date"/>
-                                                        </small>
-                                                    </div>
+                                                <div class="notification-footer mt-1">
+                                                    <small class="o_notification_sender text-muted">
+                                                        <t t-esc="notification.sender_name"/>
+                                                    </small>
                                                 </div>
                                             </div>
                                         </div>
