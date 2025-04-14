@@ -1,123 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="notification_bell.BellIcon" owl="1">
-        <div class="o_notification_bell_icon dropdown" t-on-click="toggleDropdown">
-            <a href="#" class="dropdown-toggle o-no-caret" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-bell"></i>
-                <t t-if="state.unreadCount > 0">
-                    <span class="o_notification_counter badge rounded-pill bg-danger">
-                        <t t-if="state.unreadCount > 99">99+</t>
-                        <t t-else=""><t t-esc="state.unreadCount"/></t>
-                    </span>
-                </t>
+        <div class="o_notification_bell_icon dropdown">
+            <a href="#" class="dropdown-toggle o-no-caret" data-bs-toggle="dropdown" aria-expanded="false" t-on-click="toggleDropdown">
+                <i class="fa fa-bell"/>
+                <span t-if="state.unreadCount > 0" class="o_notification_counter badge rounded-pill bg-danger">
+                    <t t-if="state.unreadCount > 99">99+</t>
+                    <t t-else=""><t t-esc="state.unreadCount"/></t>
+                </span>
             </a>
-            <div class="dropdown-menu dropdown-menu-end o_notification_menu" role="menu">
+            <div class="dropdown-menu dropdown-menu-end o_notification_menu" role="menu" t-on-click.stop="">
                 <div class="dropdown-header">
-                    <strong>Notification</strong>
-                    <div class="float-end notification-actions" t-if="state.notifications.length > 0">
-                        <a href="#" t-on-click="markAllAsRead" title="Đánh dấu đã đọc tất cả" class="text-center me-3">
-                            <i class="fa fa-check"></i> Mark all as read
-                        </a>
-                        <a href="#" t-on-click="viewAllNotifications" title="Xem tất cả các thông báo" class="text-center">
-                            <i class="fa fa-tree"></i> See all
-                        </a>
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <strong>Notification</strong>
+                        <div class="notification-actions" t-if="state.notifications.length > 0">
+                            <a href="#" t-on-click.stop="markAllAsRead" title="Mark all as read" class="text-center me-3">
+                                <i class="fa fa-check"/> Mark all as read
+                            </a>
+                            <a href="#" t-on-click.stop="viewAllNotifications" title="See all notifications" class="text-center">
+                                <i class="fa fa-list"/> See all
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <ul class="nav nav-tabs" role="tabtree">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" t-on-click.prevent="">All</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="unread-tab" data-bs-toggle="tab" href="#unread" role="tab" t-on-click.prevent="">Unread</a>
-                    </li>
-                </ul>
+                <div class="notification-tabs-container">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="all-tab" href="#" t-on-click.stop="switchToAll">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="unread-tab" href="#" t-on-click.stop="switchToUnread">Unread</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="tab-content">
-                    <div class="tab-pane fade show active" id="all" role="tabpanel" style="background-color: #fff;">
-                        <div class="o_notification_tree">
+                    <div class="tab-pane fade show active" id="all" role="tabpanel">
+                        <div class="o_notification_list">
                             <t t-if="state.notifications.length > 0">
                                 <t t-foreach="state.notifications" t-as="notification" t-key="notification.id">
-                                    <a href="#" class="dropdown-item o_notification_item" t-att-class="{ 'o_notification_unread': notification.state === 'unread' }" t-att-data-notification-id="notification.id" t-on-click="openNotification">
-                                        <div class="o_notification_icon me-2">
-                                            <img t-att-src="'/web/image/res.users/' + notification.sender_id + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
-                                        </div>
-                                        <div class="o_notification_content flex-grow-1" t-att-class="{ 'fw-bold': notification.state === 'unread' }">
-                                            <div class="d-flex justify-content-between align-items-start">
-                                                <div class="o_notification_title mb-1"><t t-esc="notification.name"/></div>
-                                                <div class="mt-1">
-                                                    <small class="o_notification_date text-muted text-end d-block">
-                                                        <t t-esc="notification.create_date"/>
-                                                    </small>
-                                                </div>
+                                    <div class="o_notification_item" t-att-class="{ 'o_notification_unread': notification.state === 'unread' }">
+                                        <div class="d-flex w-100" t-att-data-notification-id="notification.id" t-on-click="openNotification">
+                                            <div class="o_notification_icon me-2">
+                                                <img t-att-src="'/web/image/res.users/' + notification.sender_id[0] + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
                                             </div>
-                                            
-                                            <div class="o_notification_message text-muted"><t t-esc="notification.message"/></div>
-                                            <div class="d-flex justify-content-between align-items-center mt-1">
-                                                <small class="text-muted">
-                                                    <t t-esc="notification.sender_name"/>
-                                                </small>
-                                                <div class="o_notification_actions">
-                                                    <button t-if="notification.state === 'unread'" class="btn btn-sm btn-link text-primary p-0 me-2" 
-                                                            t-att-data-notification-id="notification.id" t-on-click.stop="markAsRead">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-link text-danger p-0" 
-                                                            t-att-data-notification-id="notification.id" t-on-click.stop="dismissNotification">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
+                                            <div class="o_notification_content">
+                                                <div class="o_notification_title" t-att-class="{ 'fw-bold': notification.state === 'unread' }">
+                                                    <span t-esc="notification.name"/>
+                                                </div>
+                                                <div class="o_notification_message">
+                                                    <span t-esc="notification.message"/>
+                                                </div>
+                                                <div class="notification-footer">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <small class="o_notification_sender text-muted">
+                                                            <t t-esc="notification.sender_name"/>
+                                                        </small>
+                                                        <small class="o_notification_date text-muted">
+                                                            <t t-esc="notification.create_date"/>
+                                                        </small>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
+                                        <div class="o_notification_actions">
+                                            <a t-if="notification.state === 'unread'" href="#" t-att-data-notification-id="notification.id" t-on-click.stop="markAsRead" class="text-success me-2" title="Mark as read">
+                                                <i class="fa fa-check"/>
+                                            </a>
+                                            <a href="#" t-att-data-notification-id="notification.id" t-on-click.stop="dismissNotification" class="text-danger" title="Dismiss">
+                                                <i class="fa fa-times"/>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </t>
                             </t>
                             <t t-else="">
-                                <div class="dropdown-item text-center text-muted py-3">
-                                    <i class="fa fa-bell-slash me-1"></i> No notifications
+                                <div class="empty-state">
+                                    <i class="fa fa-bell-slash fa-2x mb-2"/>
+                                    <p>No notifications</p>
                                 </div>
                             </t>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="unread" role="tabpanel">
-                        <div class="o_notification_tree">
+                        <div class="o_notification_list">
                             <t t-if="state.unreadNotifications.length > 0">
                                 <t t-foreach="state.unreadNotifications" t-as="notification" t-key="notification.id">
-                                    <a href="#" class="dropdown-item o_notification_item" t-att-class="{ 'o_notification_unread': notification.state === 'unread' }" t-att-data-notification-id="notification.id" t-on-click="openNotification">
-                                        <div class="o_notification_icon me-2">
-                                            <img t-att-src="'/web/image/res.users/' + notification.sender_id + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
-                                        </div>
-                                        <div class="o_notification_content flex-grow-1" t-att-class="{ 'fw-bold': notification.state === 'unread' }">
-                                            <div class="d-flex justify-content-between align-items-start">
-                                                <div class="o_notification_title mb-1"><t t-esc="notification.name"/></div>
-                                                <div class="mt-1">
-                                                    <small class="o_notification_date text-muted text-end d-block">
-                                                        <t t-esc="notification.create_date"/>
-                                                    </small>
-                                                </div>
+                                    <div class="o_notification_item o_notification_unread">
+                                        <div class="d-flex w-100" t-att-data-notification-id="notification.id" t-on-click="openNotification">
+                                            <div class="o_notification_icon me-2">
+                                                <img t-att-src="'/web/image/res.users/' + notification.sender_id[0] + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
                                             </div>
-                                            
-                                            <div class="o_notification_message text-muted"><t t-esc="notification.message"/></div>
-                                            <div class="d-flex justify-content-between align-items-center mt-1">
-                                                <small class="text-muted">
-                                                    <t t-esc="notification.sender_name"/>
-                                                </small>
-                                                <div class="o_notification_actions">
-                                                    <button t-if="notification.state === 'unread'" class="btn btn-sm btn-link text-primary p-0 me-2" 
-                                                            t-att-data-notification-id="notification.id" t-on-click.stop="markAsRead">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-link text-danger p-0" 
-                                                            t-att-data-notification-id="notification.id" t-on-click.stop="dismissNotification">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
+                                            <div class="o_notification_content">
+                                                <div class="o_notification_title fw-bold">
+                                                    <span t-esc="notification.name"/>
+                                                </div>
+                                                <div class="o_notification_message">
+                                                    <span t-esc="notification.message"/>
+                                                </div>
+                                                <div class="notification-footer">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <small class="o_notification_sender text-muted">
+                                                            <t t-esc="notification.sender_name"/>
+                                                        </small>
+                                                        <small class="o_notification_date text-muted">
+                                                            <t t-esc="notification.create_date"/>
+                                                        </small>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
+                                        <div class="o_notification_actions">
+                                            <a href="#" t-att-data-notification-id="notification.id" t-on-click.stop="markAsRead" class="text-success me-2" title="Mark as read">
+                                                <i class="fa fa-check"/>
+                                            </a>
+                                            <a href="#" t-att-data-notification-id="notification.id" t-on-click.stop="dismissNotification" class="text-danger" title="Dismiss">
+                                                <i class="fa fa-times"/>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </t>
                             </t>
                             <t t-else="">
-                                <div class="dropdown-item text-center text-muted py-3">
-                                    <i class="fa fa-bell-slash me-1"></i> No notifications
+                                <div class="empty-state">
+                                    <i class="fa fa-bell-slash fa-2x mb-2"/>
+                                    <p>No unread notifications</p>
                                 </div>
                             </t>
                         </div>

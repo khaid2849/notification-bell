@@ -1,11 +1,11 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { NotificationBellComponent } from "./notification_bell";
+import { NotificationBell } from "./notification_bell";
 
 const systrayRegistry = registry.category("systray");
 
 systrayRegistry.add("notification_bell", {
-  Component: NotificationBellComponent,
+  Component: NotificationBell,
   sequence: 10,
 });
