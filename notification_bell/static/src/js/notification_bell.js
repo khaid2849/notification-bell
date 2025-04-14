@@ -17,9 +17,15 @@ export class NotificationBell extends Component {
   static props = {};
 
   setup() {
-    this.orm = useService("orm");
-    this.action = useService("action");
-    this.busService = useService("bus_service");
+    // Initialize services
+    const orm = useService("orm");
+    const actionService = useService("action");
+    const busService = useService("bus_service");
+
+    // Assign services to instance
+    this.orm = orm;
+    this.actionService = actionService;
+    this.busService = busService;
 
     this.formatDateTime = (dateStr) => {
       if (!dateStr) return "";
@@ -70,20 +76,19 @@ export class NotificationBell extends Component {
   }
 
   /**
-   * 
+   *
    * @private
    */
   _playNotificationSound() {
     try {
       this.notificationSound.currentTime = 0;
-      this.notificationSound.play().catch(error => {
+      this.notificationSound.play().catch((error) => {
         console.warn("Could not play notification sound:", error);
       });
     } catch (error) {
       console.warn("Error playing notification sound:", error);
     }
   }
-
 
   _registerBusEvents() {
     const channel = `notification_bell_${session.user_id}`;
@@ -171,7 +176,7 @@ export class NotificationBell extends Component {
       );
 
       if (result && typeof result === "object" && result.type) {
-        await this.action.doAction(result);
+        await this.actionService.doAction(result);
       }
 
       this.fetchUnreadCount();
@@ -211,13 +216,13 @@ export class NotificationBell extends Component {
 
     try {
       this.state.isOpen = false;
-      
-      await this.action.doAction('notification_bell.action_my_notification');
+      await this.actionService.doAction(
+        "notification_bell.action_my_notification"
+      );
     } catch (error) {
       console.error("Error opening notifications list view:", error);
     }
   }
-
 
   async markAsRead(ev) {
     ev.preventDefault();

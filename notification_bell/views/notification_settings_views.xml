@@ -19,10 +19,10 @@
         <field name="name">user.notification.settings.tree</field>
         <field name="model">user.notification.settings</field>
         <field name="arch" type="xml">
-            <list string="Notification Settings">
+            <tree string="Notification Settings">
                 <field name="user_id"/>
                 <field name="notifications_limit"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -58,7 +58,7 @@
     <record id="action_notification_settings_admin" model="ir.actions.act_window">
         <field name="name">All Notification Settings</field>
         <field name="res_model">user.notification.settings</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No notification settings found!

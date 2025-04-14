@@ -19,11 +19,11 @@
                             <i class="fa fa-check"></i> Mark all as read
                         </a>
                         <a href="#" t-on-click="viewAllNotifications" title="Xem tất cả các thông báo" class="text-center">
-                            <i class="fa fa-list"></i> See all
+                            <i class="fa fa-tree"></i> See all
                         </a>
                     </div>
                 </div>
-                <ul class="nav nav-tabs" role="tablist">
+                <ul class="nav nav-tabs" role="tabtree">
                     <li class="nav-item">
                         <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" t-on-click.prevent="">All</a>
                     </li>
@@ -33,7 +33,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="all" role="tabpanel" style="background-color: #fff;">
-                        <div class="o_notification_list">
+                        <div class="o_notification_tree">
                             <t t-if="state.notifications.length > 0">
                                 <t t-foreach="state.notifications" t-as="notification" t-key="notification.id">
                                     <a href="#" class="dropdown-item o_notification_item" t-att-class="{ 'o_notification_unread': notification.state === 'unread' }" t-att-data-notification-id="notification.id" t-on-click="openNotification">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="unread" role="tabpanel">
-                        <div class="o_notification_list">
+                        <div class="o_notification_tree">
                             <t t-if="state.unreadNotifications.length > 0">
                                 <t t-foreach="state.unreadNotifications" t-as="notification" t-key="notification.id">
                                     <a href="#" class="dropdown-item o_notification_item" t-att-class="{ 'o_notification_unread': notification.state === 'unread' }" t-att-data-notification-id="notification.id" t-on-click="openNotification">
