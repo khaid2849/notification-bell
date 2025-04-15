@@ -6,8 +6,8 @@
         <field name="arch" type="xml">
             <form string="Notification">
                 <header>
-                    <button name="mark_as_read" string="Mark as Read" type="object" class="oe_highlight" invisible="state == 'read'"/>
-                    <button name="mark_as_unread" string="Mark as Unread" type="object" invisible="state == 'unread'"/>
+                    <button name="mark_as_read" string="Mark as Read" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'read')]}"/>
+                    <button name="mark_as_unread" string="Mark as Unread" type="object" attrs="{'invisible': [('state', '=', 'unread')]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="unread,read"/>
                 </header>
                 <sheet>
@@ -24,7 +24,7 @@
                         </group>
                         <group>
                             <field name="create_date" readonly="1"/>
-                            <field name="read_date" readonly="1" invisible="read_date == False"/>
+                            <field name="read_date" readonly="1" attrs="{'invisible': [('state', '=', False)]}"/>
                         </group>
                     </group>
                     <notebook>
@@ -34,13 +34,13 @@
                         <page string="Target" name="target">
                             <group>
                                 <field name="action_type" widget="radio"/>
-                                <field name="res_model" invisible="action_type != 'record'" required="action_type == 'record'"/>
-                                <field name="res_id" invisible="action_type != 'record'" required="action_type == 'record'"/>
+                                <field name="res_model" attrs="{'invisible': [('action_type', '!=', 'record')], 'required': [('action_type', '=', 'record')]}"/>
+                                <field name="res_id" attrs="{'invisible': [('action_type', '!=', 'record')], 'required': [('action_type', '=', 'record')]}"/>
                                 
-                                <field name="action_id" invisible="action_type != 'window'"/>
-                                <field name="action_xml_id" invisible="action_type != 'window'"/>
-                                <field name="action_context" invisible="action_type != 'window'"/>
-                                <field name="action_url" invisible="action_type != 'url'" required="action_type == 'url'"/>
+                                <field name="action_id" attrs="{'invisible': [('action_type', '!=', 'window')]}"/>
+                                <field name="action_xml_id" attrs="{'invisible': [('action_type', '!=', 'window')]}"/>
+                                <field name="action_context" attrs="{'invisible': [('action_type', '!=', 'window')]}"/>
+                                <field name="action_url" attrs="{'invisible': [('action_type', '!=', 'url')], 'required': [('action_type', '=', 'url')]}"/>
                             </group>
                         </page>
                     </notebook>
