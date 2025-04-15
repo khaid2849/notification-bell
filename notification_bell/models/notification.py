@@ -240,47 +240,6 @@ class UserNotification(models.Model):
         return True
         
     @api.model
-    def json_rpc(self, route, params=None):
-        """Make JSON-RPC call from OWL Component.
-        
-        This method allows OWL components to make RPC calls without 
-        relying on the default rpc service. It proxies the call to
-        the appropriate controller method.
-        
-        Args:
-            route (str): The route to call
-            params (dict, optional): Parameters to pass to the route
-            
-        Returns:
-            dict: The result from the controller
-        """
-        if params is None:
-            params = {}
-            
-        if route == '/notification_bell/get_notifications':
-            from ..controllers.main import NotificationController
-            controller = NotificationController()
-            return controller.get_notifications(**params)
-        elif route == '/notification_bell/mark_as_read':
-            from ..controllers.main import NotificationController
-            controller = NotificationController()
-            return controller.mark_as_read(**params)
-        elif route == '/notification_bell/mark_as_unread':
-            from ..controllers.main import NotificationController
-            controller = NotificationController()
-            return controller.mark_as_unread(**params)
-        elif route == '/notification_bell/get_unread_count':
-            from ..controllers.main import NotificationController
-            controller = NotificationController()
-            return controller.get_unread_count()
-        elif route == '/notification_bell/dismiss_notification':
-            from ..controllers.main import NotificationController
-            controller = NotificationController()
-            return controller.dismiss_notification(**params)
-        
-        return {'error': 'Route not found'}
-    
-    @api.model
     def send_notification(self, user_id, name, message, res_model=False, 
                           res_id=False, notification_type='info'):
         """Create notification from anywhere in the system.

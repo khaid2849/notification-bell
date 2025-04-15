@@ -48,8 +48,10 @@ This module is licensed under LGPL-3.
     'assets': {
         'web.assets_backend': [
             'notification_bell/static/src/scss/**/*',
+            'notification_bell/static/src/xml/**/*',
             'notification_bell/static/src/js/notification_bell.js',
-            'notification_bell/static/src/js/systray_notification_menu.js',
+        ],
+        'web.assets_qweb': [
             'notification_bell/static/src/xml/**/*',
         ],
     },
@@ -62,4 +64,4 @@ This module is licensed under LGPL-3.
     'images': [
         'static/description/images.png',
     ],
-} 
+}

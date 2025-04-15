@@ -165,13 +165,4 @@ class NotificationController(http.Controller):
         return {
             'success': success,
             'unread_count': request.env['user.notification'].get_unread_count()
-        }
-
-    @api.model
-    def create_notification(self, values):
-        notification = self.env['user.notification'].create(values)
-        self.env['bus.bus'].sendone(
-            (self._cr.dbname, 'notification_bell_%s' % notification.user_id.id),
-            {'type': 'new_notification', 'notification': notification.read()}
-        )
-        return notification 
+        } 
