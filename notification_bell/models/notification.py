@@ -79,21 +79,26 @@ class UserNotification(models.Model):
     )
 
     def mark_as_read(self):
-        """Mark notification as read.
+        """Mark notification as read and return new unread count.
         
         Updates the state to 'read' and sets the read_date
         to the current datetime.
         
         Returns:
-            bool: True indicating success
+            dict: Dictionary containing the new unread count for the user.
         """
-        for notification in self:
+        user_id = self.env.uid
+        notifications_to_update = self.filtered(lambda n: n.user_id.id == user_id)
+        if not notifications_to_update:
+             return {'unread_count': self.get_unread_count(user_id=user_id)}
+             
+        for notification in notifications_to_update:
             if notification.state == 'unread':
                 notification.write({
                     'state': 'read',
                     'read_date': fields.Datetime.now()
                 })
-        return True
+        return {'unread_count': self.get_unread_count(user_id=user_id)}
     
     def mark_as_unread(self):
         """Mark notification as unread.
@@ -179,27 +184,32 @@ class UserNotification(models.Model):
                 If not provided, try to get it from context.
         
         Returns:
-            dict or bool: Action to open the record or True if successful
+            dict: Action to open the record or a dictionary containing the new unread count.
         """
         if notification_id is None:
             notification_id = self.env.context.get('notification_id')
             if not notification_id:
-                return False
+                return {'unread_count': self.get_unread_count(user_id=self.env.uid)}
                 
         notification = self.browse(notification_id)
         if notification.user_id.id != self.env.uid:
-            return False
+             return {'unread_count': self.get_unread_count(user_id=self.env.uid)}
             
-        notification.sudo().write({"state": "read", "read_date": fields.Datetime.now()})
+        if notification.state == 'unread':
+             notification.sudo().write({"state": "read", "read_date": fields.Datetime.now()})
         
+        new_unread_count = self.get_unread_count(user_id=self.env.uid)
+        
+        action_to_return = False
         if notification.action_type:
             if notification.action_type == 'url' and notification.action_url:
-                return {
+                action_to_return = {
                     'type': 'ir.actions.act_url',
                     'url': notification.action_url,
                     'target': 'new',
                 }
             elif notification.action_type == 'window':
+                action = {}
                 if notification.action_id:
                     action = notification.action_id.read()[0]
                 elif notification.action_xml_id:
@@ -211,9 +221,10 @@ class UserNotification(models.Model):
                         action['context'] = context
                     except:
                         pass
-                return action
+                if action:
+                    action_to_return = action
             elif notification.action_type == 'record' and notification.res_model and notification.res_id:
-                return {
+                action_to_return = {
                     'type': 'ir.actions.act_window',
                     'res_model': notification.res_model,
                     'res_id': notification.res_id,
@@ -222,22 +233,50 @@ class UserNotification(models.Model):
                     'target': 'current',
                 }
         
-        return True
+        if action_to_return:
+            action_to_return['unread_count'] = new_unread_count 
+            return action_to_return
+        else:
+            return {'unread_count': new_unread_count}
     
     def dismiss_notification(self):
-        """Dismiss notification by setting it to inactive.
+        """Dismiss notification by setting it to inactive and return new count.
         
         Sets the notification to inactive state so it's no longer visible
         in notification lists but remains in the database for history.
         
         Returns:
-            bool: True indicating success
+            dict: Dictionary containing success status and the new unread count.
         """
-        for notification in self:
-            notification.write({
+        user_id = self.env.uid
+        notifications_to_update = self.filtered(lambda n: n.user_id.id == user_id)
+        success = False
+        if notifications_to_update:
+            notifications_to_update.write({
                 'active': False
             })
-        return True
+            success = True
+            
+        return {
+            'success': success,
+            'unread_count': self.get_unread_count(user_id=user_id)
+            }
+            
+    @api.model
+    def mark_all_as_read(self):
+        """Mark all unread notifications for the current user as read.
+        
+        Returns:
+            dict: Dictionary containing the new unread count (should be 0).
+        """
+        user_id = self.env.uid
+        notifications = self.search([('user_id', '=', user_id), ('state', '=', 'unread')])
+        if notifications:
+            notifications.write({
+                'state': 'read',
+                'read_date': fields.Datetime.now()
+            })
+        return {'unread_count': self.get_unread_count(user_id=user_id)}
         
     @api.model
     def send_notification(self, user_id, name, message, res_model=False, 
