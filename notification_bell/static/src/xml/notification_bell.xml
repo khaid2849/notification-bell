@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="notification_bell.SystrayIcon">
+        <a href="#" class="dropdown-toggle o-no-caret" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-bell"/>
+            <span class="o_notification_counter badge badge-pill"
+                  t-att-style="widget.unreadCount > 0 ? '' : 'display: none;'">
+                <t t-if="widget.unreadCount > 99">99+</t>
+                <t t-elif="widget.unreadCount > 0"><t t-esc="widget.unreadCount"/></t>
+                <t t-else="">0</t>
+            </span>
+        </a>
+    </t>
+
+    <t t-name="notification_bell.BellIcon">
+        <div class="o_notification_bell_icon o_notification_bell_icon_container dropdown">
+            <t t-call="notification_bell.SystrayIcon"/>
+
+            <div class="dropdown-menu dropdown-menu-end o_notification_menu o_notification_dropdown_menu dropdown-menu-right" role="menu">
+                 <div class="o_notification_dropdown_items_placeholder"/>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="notification_bell.DropdownItems">
+        <div class="dropdown-header">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <strong>Notification</strong>
+                <div class="notification-actions" t-if="widget.notifications.length > 0">
+                    <a href="#" title="Mark all as read" class="text-center me-3 o_notification_mark_all_read">
+                        <i class="fa fa-check"/> Mark all as read
+                    </a>
+                    <a href="#" title="See all notifications" class="text-center o_notification_view_all">
+                        <i class="fa fa-list"/> See all
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="notification-tabs-container">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a t-att-class="'nav-link ' + (widget.activeTab === 'all' ? 'active' : '')" id="all-tab" href="#all-notifications">All</a>
+                </li>
+                <li class="nav-item">
+                    <a t-att-class="'nav-link ' + (widget.activeTab === 'unread' ? 'active' : '')" id="unread-tab" href="#unread-notifications">Unread</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div t-att-class="'tab-pane fade ' + (widget.activeTab === 'all' ? 'show active' : '')" id="all-notifications" role="tabpanel">
+                <div class="o_notification_list">
+                    <t t-if="widget.notifications.length > 0">
+                        <t t-foreach="widget.notifications" t-as="notification" t-key="notification.id">
+                            <t t-if="notification.state === 'unread'">
+                                <div class="o_notification_item o_notification_unread" t-att-data-notification-id="notification.id">
+                                    <div class="d-flex w-100">
+                                        <div class="o_notification_icon me-2">
+                                            <img t-att-src="'/web/image/res.users/' + notification.sender_id[0] + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
+                                        </div>
+                                        <div class="o_notification_content">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <div class="o_notification_title fw-bold">
+                                                    <span t-esc="notification.name"/>
+                                                </div>
+                                                <small class="o_notification_date text-muted ms-2">
+                                                    <t t-esc="notification.create_date"/>
+                                                </small>
+                                            </div>
+                                            <div class="o_notification_message">
+                                                <span t-esc="notification.message"/>
+                                            </div>
+                                            <div class="notification-footer mt-1">
+                                                <small class="o_notification_sender text-muted">
+                                                    <t t-esc="notification.sender_name"/>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_notification_actions">
+                                        <a t-if="notification.state === 'unread'" href="#" class="text-success me-2 o_notification_mark_read" title="Mark as read">
+                                            <i class="fa fa-check"/>
+                                        </a>
+                                        <a href="#" class="text-danger o_notification_dismiss" title="Dismiss">
+                                            <i class="fa fa-times"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <t t-else="">
+                                <div class="o_notification_item" t-att-data-notification-id="notification.id">
+                                    <div class="d-flex w-100">
+                                        <div class="o_notification_icon me-2">
+                                            <img t-att-src="'/web/image/res.users/' + notification.sender_id[0] + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
+                                        </div>
+                                        <div class="o_notification_content">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <div class="o_notification_title">
+                                                    <span t-esc="notification.name"/>
+                                                </div>
+                                                <small class="o_notification_date text-muted ms-2">
+                                                    <t t-esc="notification.create_date"/>
+                                                </small>
+                                            </div>
+                                            <div class="o_notification_message">
+                                                <span t-esc="notification.message"/>
+                                            </div>
+                                            <div class="notification-footer mt-1">
+                                                <small class="o_notification_sender text-muted">
+                                                    <t t-esc="notification.sender_name"/>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_notification_actions">
+                                        <a href="#" class="text-danger o_notification_dismiss" title="Dismiss">
+                                            <i class="fa fa-times"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="empty-state text-center p-3">
+                            <i class="fa fa-bell-slash fa-2x mb-2 text-muted"/>
+                            <p class="text-muted">No notifications</p>
+                        </div>
+                    </t>
+                </div>
+            </div>
+            <div t-att-class="'tab-pane fade ' + (widget.activeTab === 'unread' ? 'show active' : '')" id="unread-notifications" role="tabpanel">
+                <div class="o_notification_list">
+                    <t t-if="widget.unreadNotifications.length > 0">
+                        <t t-foreach="widget.unreadNotifications" t-as="notification">
+                             <div class="o_notification_item o_notification_unread" t-att-data-notification-id="notification.id">
+                                <div class="d-flex w-100">
+                                    <div class="o_notification_icon me-2">
+                                        <img t-att-src="'/web/image/res.users/' + notification.sender_id[0] + '/avatar_128'" alt="Avatar" class="o_avatar rounded-circle" />
+                                    </div>
+                                    <div class="o_notification_content">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <div class="o_notification_title fw-bold">
+                                                <span t-esc="notification.name"/>
+                                            </div>
+                                            <small class="o_notification_date text-muted ms-2">
+                                                <t t-esc="notification.create_date"/>
+                                            </small>
+                                        </div>
+                                        <div class="o_notification_message">
+                                            <span t-esc="notification.message"/>
+                                        </div>
+                                        <div class="notification-footer mt-1">
+                                            <small class="o_notification_sender text-muted">
+                                                <t t-esc="notification.sender_name"/>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_notification_actions">
+                                    <a href="#" class="text-success me-2 o_notification_mark_read" title="Mark as read">
+                                        <i class="fa fa-check"/>
+                                    </a>
+                                    <a href="#" class="text-danger o_notification_dismiss" title="Dismiss">
+                                        <i class="fa fa-times"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="empty-state text-center p-3">
+                            <i class="fa fa-bell-slash fa-2x mb-2 text-muted"/>
+                            <p class="text-muted">No unread notifications</p>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates> 
