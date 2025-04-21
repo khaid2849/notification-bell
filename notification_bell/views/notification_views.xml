@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_notification_form" model="ir.ui.view">
+        <field name="name">user.notification.form</field>
+        <field name="model">user.notification</field>
+        <field name="arch" type="xml">
+            <form string="Notification">
+                <header>
+                    <button name="mark_as_read" string="Mark as Read" type="object" class="oe_highlight" invisible="state == 'read'"/>
+                    <button name="mark_as_unread" string="Mark as Unread" type="object" invisible="state == 'unread'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="unread,read"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Title"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sender_id"/>
+                            <field name="user_id"/>
+                            <field name="notification_type"/>
+                        </group>
+                        <group>
+                            <field name="create_date" readonly="1"/>
+                            <field name="read_date" readonly="1" invisible="read_date == False"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Message" name="message">
+                            <field name="message" placeholder="Notification message..."/>
+                        </page>
+                        <page string="Target" name="target">
+                            <group>
+                                <field name="action_type" widget="radio"/>
+                                <field name="res_model" invisible="action_type != 'record'" required="action_type == 'record'"/>
+                                <field name="res_id" invisible="action_type != 'record'" required="action_type == 'record'"/>
+                                
+                                <field name="action_id" invisible="action_type != 'window'"/>
+                                <field name="action_xml_id" invisible="action_type != 'window'"/>
+                                <field name="action_context" invisible="action_type != 'window'"/>
+                                <field name="action_url" invisible="action_type != 'url'" required="action_type == 'url'"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_notification_tree" model="ir.ui.view">
+        <field name="name">user.notification.tree</field>
+        <field name="model">user.notification</field>
+        <field name="arch" type="xml">
+            <list string="Notifications" decoration-muted="state == 'read'" decoration-bf="state == 'unread'">
+                <field name="name"/>
+                <field name="sender_id"/>
+                <field name="user_id"/>
+                <field name="create_date"/>
+                <field name="notification_type" widget="badge" 
+                       decoration-info="notification_type == 'info'" 
+                       decoration-success="notification_type == 'success'"
+                       decoration-warning="notification_type == 'warning'"
+                       decoration-danger="notification_type == 'danger'"/>
+                <field name="action_type"/>
+                <field name="state"/>
+                <button name="action_open_record" string="View notification" type="object" class="oe_highlight" context="{'notification_id': id}"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_notification_search" model="ir.ui.view">
+        <field name="name">user.notification.search</field>
+        <field name="model">user.notification</field>
+        <field name="arch" type="xml">
+            <search string="Search Notifications">
+                <field name="name"/>
+                <field name="message"/>
+                <field name="user_id"/>
+                <field name="sender_id"/>
+                <separator/>
+                <filter string="Unread" name="unread" domain="[('state', '=', 'unread')]"/>
+                <filter string="Read" name="read" domain="[('state', '=', 'read')]"/>
+                <separator/>
+                <filter string="Record Target" name="record_target" domain="[('action_type', '=', 'record')]"/>
+                <filter string="Action Target" name="action_target" domain="[('action_type', '=', 'action')]"/>
+                <separator/>
+                <filter string="Information" name="info" domain="[('notification_type', '=', 'info')]"/>
+                <filter string="Success" name="success" domain="[('notification_type', '=', 'success')]"/>
+                <filter string="Warning" name="warning" domain="[('notification_type', '=', 'warning')]"/>
+                <filter string="Danger" name="danger" domain="[('notification_type', '=', 'danger')]"/>
+                <separator/>
+                <filter string="Archive" name="archive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Target Type" name="group_by_action_type" context="{'group_by': 'action_type'}"/>
+                    <filter string="Type" name="group_by_type" context="{'group_by': 'notification_type'}"/>
+                    <filter string="To User" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="From User" name="group_by_sender" context="{'group_by': 'sender_id'}"/>
+                    <filter string="Month" name="group_by_month" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_notification" model="ir.actions.act_window">
+        <field name="name">Notifications</field>
+        <field name="res_model">user.notification</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_unread': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No notifications yet!
+            </p>
+            <p>
+                Create a new notification to send it to a user.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_my_notification" model="ir.actions.act_window">
+        <field name="name">My Notifications</field>
+        <field name="res_model">user.notification</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{'search_default_unread': 1, 'create': False, 'edit': False, 'delete': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No notifications yet!
+            </p>
+            <p>
+                You will see notifications sent to you here.
+            </p>
+        </field>
+    </record>
+
+</odoo> 
